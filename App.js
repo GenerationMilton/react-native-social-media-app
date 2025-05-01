@@ -2,8 +2,9 @@
 import React from 'react';
 
 import {
-  SafeAreaView,
+  SafeAreaView, Text
 } from 'react-native';
+import { getFontFamily } from './assets/fonts/helper';
 
 
 const App =()=> {
@@ -12,7 +13,9 @@ const App =()=> {
  
   return (
     <SafeAreaView>
-    
+      <Text style={{fontSize: 50 , fontFamily: getFontFamily('Inter', '100') }}>
+        Hello World"
+      </Text>
     </SafeAreaView>
   );
 }
