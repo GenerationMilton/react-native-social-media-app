@@ -8,11 +8,57 @@ import {
 import Title from './components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import globalStyle from './assets/fonts/styles/globalStyle';
+import globalStyle from './assets/styles/globalStyle';
 
 
 const App =()=> {
- 
+  const userStories =[
+    {
+      firstName: 'Joseph',
+      id: 1,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Angel',
+      id: 2,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'White',
+      id: 3,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Oliver',
+      id: 4,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Nata',
+      id: 5,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Nicolas',
+      id: 6,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Nino',
+      id: 7,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Nana',
+      id: 8,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+    {
+      firstName: 'Adam',
+      id: 9,
+      profileImage: require('./assets/images/default_profile.png')
+    },
+  ];
 
  
   return (

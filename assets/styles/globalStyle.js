@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { getFontFamily } from "../helper";
+import { getFontFamily } from "../fonts/helper";
 
 const globalStyle = StyleSheet.create({
     header: {
