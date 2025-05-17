@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   SafeAreaView, TouchableOpacity, View, Text,
@@ -63,6 +63,30 @@ const App =()=> {
   ];
 
  
+  const userStoriespageSize = 4;
+  const [userStoriesCurrentPage, setUserStoriesCurrentPage] = useState(1);
+  const [userStoriesRenderedData, setUserStoriesRenderedData] = useState([]);
+  const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
+
+  const pagination = (database, currentPage, pageSize)=>{
+    console.log('currentPage', currentPage);
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    if( startIndex >= database.length){
+      return [];
+    }
+    return database.slice(startIndex, endIndex);
+  }
+
+
+  useEffect(()=>{
+    setIsLoadingUserStories(true);
+    const getInitialData = pagination(userStories, 1, userStoriespageSize);
+    setUserStoriesCurrentPage(getInitialData);
+    setIsLoadingUserStories(false);
+  },[]);
+
+
   return (
     <SafeAreaView>
       <View style={
@@ -78,11 +102,32 @@ const App =()=> {
       </View>
       <View style={globalStyle.userStoryContainer}>
         <FlatList 
+          onEndReachedThreshold={0.5}
+          onEndReached={()=>{
+            if(isLoadingUserStories){
+              return;
+            }
+            setIsLoadingUserStories(true);
+            
+            const contentToAppend = pagination(
+              userStories,
+              userStoriesCurrentPage + 1,
+              userStoriespageSize,
+            );
+            if(contentToAppend > 0){
+              setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
+              setUserStoriesRenderedData(prev=> [...prev, ...contentToAppend]);
+            }
+            setIsLoadingUserStories(false);
+
+          }}
+
           showsHorizontalScrollIndicator={false}
           horizontal={true}
-          data={userStories} 
+          data={userStoriesRenderedData} 
           renderItem={({item}) => (
             <UserStory 
+              key={'userStory'+item.id}
               firstName={item.firstName}
               profileImage={item.profileImage}/>
           )}
