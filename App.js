@@ -217,7 +217,7 @@ const App = () => {
               return;
             }
             setIsLoadingUserPosts(true);
-            console.log('fetching more data for you', userPostsCurrentPage+1);
+            console.log('fetching more data for you', userPostsCurrentPage + 1);
 
             const contentToAppend = pagination(
               userPosts,
