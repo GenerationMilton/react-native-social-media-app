@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import {
   SafeAreaView, TouchableOpacity, View, Text,
-  FlatList
+  FlatList,
 } from 'react-native';
 
 import Title from './components/Title/Title';
@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import globalStyle from './assets/styles/globalStyle';
 import UserStory from './components/UserStory/UserStory';
+import UserPost from './components/UserPost/UserPost';
 
 
 const App =()=> {
@@ -18,47 +19,47 @@ const App =()=> {
     {
       firstName: 'Joseph',
       id: 1,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Angel',
       id: 2,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'White',
       id: 3,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Oliver',
       id: 4,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Nata',
       id: 5,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Nicolas',
       id: 6,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Nino',
       id: 7,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Nana',
       id: 8,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
     {
       firstName: 'Adam',
       id: 9,
-      profileImage: require('./assets/images/default_profile.png')
+      profileImage: require('./assets/images/default_profile.png'),
     },
   ];
   const userPost=[
@@ -69,6 +70,8 @@ const App =()=> {
       likes: 1201,
       comments: 24,
       bookmarks :55,
+      image: require('./assets/images/default_post.png'),
+      profileImage: require('./assets/images/default_profile.png'),
       id: 1,
     },
      {
@@ -78,6 +81,8 @@ const App =()=> {
       likes: 1301,
       comments: 25,
       bookmarks :70,
+      image: require('./assets/images/default_post.png'),
+      profileImage: require('./assets/images/default_profile.png'),
       id: 2,
     },
       {
@@ -87,6 +92,8 @@ const App =()=> {
       likes: 100,
       comments: 8,
       bookmarks : 3,
+      image: require('./assets/images/default_post.png'),
+      profileImage: require('./assets/images/default_profile.png'),
       id: 3,
     },
     {
@@ -96,6 +103,8 @@ const App =()=> {
       likes: 200,
       comments: 16,
       bookmarks : 6,
+      image: require('./assets/images/default_post.png'),
+      profileImage: require('./assets/images/default_profile.png'),
       id: 4,
     },
      {
@@ -105,6 +114,8 @@ const App =()=> {
       likes: 2000,
       comments: 32,
       bookmarks : 12,
+      image: require('./assets/images/default_post.png'),
+      profileImage: require('./assets/images/default_profile.png'),
       id: 5,
     },
   ];
@@ -186,9 +197,28 @@ const App =()=> {
           )}
           />
       </View>
+      <View>
+        <FlatList 
+        data={userPost} 
+        renderItem={({item}) =>  (
+          <View style={globalStyle.userPostContainer}>
+          <UserPost 
+            firstName={item.firstName} 
+            lastName={item.lastName} 
+            image={item.image} 
+            likes={item.likes} 
+            comments={item.comments}
+            bookmarks={item.bookmarks}
+            profileImage={item.profileImage}
+            location={item.location}
+          />
+          </View>
+        )}
+        />
+      </View>
     </SafeAreaView>
   );
-}
+};
 
 
 
