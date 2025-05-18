@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -7,21 +6,19 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-
 import Title from './components/Title/Title';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
+import {faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import globalStyle from './assets/styles/globalStyle';
 import UserStory from './components/UserStory/UserStory';
 import UserPost from './components/UserPost/UserPost';
-
 const App = () => {
   const userStories = [
     {
       firstName: 'Joseph',
       id: 1,
       profileImage: require('./assets/images/default_profile.png'),
-    },
+    }, //0
     {
       firstName: 'Angel',
       id: 2,
@@ -33,7 +30,7 @@ const App = () => {
       profileImage: require('./assets/images/default_profile.png'),
     },
     {
-      firstName: 'Oliver',
+      firstName: 'Olivier',
       id: 4,
       profileImage: require('./assets/images/default_profile.png'),
     },
@@ -41,7 +38,7 @@ const App = () => {
       firstName: 'Nata',
       id: 5,
       profileImage: require('./assets/images/default_profile.png'),
-    },
+    }, //4
     {
       firstName: 'Nicolas',
       id: 6,
@@ -61,11 +58,11 @@ const App = () => {
       firstName: 'Adam',
       id: 9,
       profileImage: require('./assets/images/default_profile.png'),
-    },
+    }, //8
   ];
   const userPosts = [
     {
-      firstName: 'Alison',
+      firstName: 'Allison',
       lastName: 'Becker',
       location: 'Boston, MA',
       likes: 1201,
@@ -121,20 +118,17 @@ const App = () => {
     },
   ];
 
-  //infinite scroll for stories
-  const userStoriespageSize = 4;
+  const userStoriesPageSize = 4;
   const [userStoriesCurrentPage, setUserStoriesCurrentPage] = useState(1);
   const [userStoriesRenderedData, setUserStoriesRenderedData] = useState([]);
   const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
 
-  //infinite scroll for user post
-  const userPostspageSize = 2;
+  const userPostsPageSize = 2;
   const [userPostsCurrentPage, setUserPostsCurrentPage] = useState(1);
   const [userPostsRenderedData, setUserPostsRenderedData] = useState([]);
   const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false);
 
   const pagination = (database, currentPage, pageSize) => {
-    console.log('currentPage', currentPage);
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     if (startIndex >= database.length) {
@@ -145,12 +139,12 @@ const App = () => {
 
   useEffect(() => {
     setIsLoadingUserStories(true);
-    const getInitialData = pagination(userStories, 1, userStoriespageSize);
-    setUserStoriesCurrentPage(getInitialData);
+    const getInitialData = pagination(userStories, 1, userStoriesPageSize);
+    setUserStoriesRenderedData(getInitialData);
     setIsLoadingUserStories(false);
 
     setIsLoadingUserPosts(true);
-    const getInitialDataPosts = pagination(userPosts, 1, userPostspageSize);
+    const getInitialDataPosts = pagination(userPosts, 1, userPostsPageSize);
     setUserPostsRenderedData(getInitialDataPosts);
     setIsLoadingUserPosts(false);
   }, []);
@@ -162,7 +156,7 @@ const App = () => {
           ListHeaderComponent={
             <>
               <View style={globalStyle.header}>
-                <Title title={'Let´s Explore '} />
+                <Title title={'Let’s Explore'} />
                 <TouchableOpacity style={globalStyle.messageIcon}>
                   <FontAwesomeIcon
                     icon={faEnvelope}
@@ -182,13 +176,12 @@ const App = () => {
                       return;
                     }
                     setIsLoadingUserStories(true);
-
                     const contentToAppend = pagination(
                       userStories,
                       userStoriesCurrentPage + 1,
-                      userStoriespageSize,
+                      userStoriesPageSize,
                     );
-                    if (contentToAppend > 0) {
+                    if (contentToAppend.length > 0) {
                       setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
                       setUserStoriesRenderedData(prev => [
                         ...prev,
@@ -217,14 +210,16 @@ const App = () => {
               return;
             }
             setIsLoadingUserPosts(true);
-            console.log('fetching more data for you', userPostsCurrentPage + 1);
-
+            console.log(
+              'fetching more data for you ',
+              userPostsCurrentPage + 1,
+            );
             const contentToAppend = pagination(
               userPosts,
               userPostsCurrentPage + 1,
-              userPostspageSize,
+              userPostsPageSize,
             );
-            if (contentToAppend > 0) {
+            if (contentToAppend.length > 0) {
               setUserPostsCurrentPage(userPostsCurrentPage + 1);
               setUserPostsRenderedData(prev => [...prev, ...contentToAppend]);
             }

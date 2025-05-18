@@ -5,12 +5,14 @@ import UserProfileImage from '../UserProfileImage/UserProfileImage';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import style from './style';
-import {faBookmark, faHeart} from '@fortawesome/free-regular-svg-icons';
-import {faMessage} from '@fortawesome/free-regular-svg-icons';
-
+import {
+  faBookmark,
+  faHeart,
+  faMessage,
+} from '@fortawesome/free-regular-svg-icons';
 const UserPost = props => {
   return (
-    <View style={style.userPostcontainer}>
+    <View style={style.userPostContainer}>
       <View style={style.user}>
         <View style={style.userContainer}>
           <UserProfileImage
@@ -21,11 +23,12 @@ const UserPost = props => {
             <Text style={style.username}>
               {props.firstName} {props.lastName}
             </Text>
-            {props.location} &&{' '}
-            <Text style={style.location}> {props.location}</Text>
+            {props.location && (
+              <Text style={style.location}> {props.location}</Text>
+            )}
           </View>
-          <FontAwesomeIcon icon={faEllipsisH} size={24} color={'#79869F'} />
         </View>
+        <FontAwesomeIcon icon={faEllipsisH} size={24} color={'#79869F'} />
       </View>
       <View style={style.postImage}>
         <Image source={props.image} />
@@ -37,15 +40,11 @@ const UserPost = props => {
         </View>
         <View style={style.userPostStatButtonRight}>
           <FontAwesomeIcon icon={faMessage} color={'#79869F'} />
-          <Text style={style.userPostStatText}>
-            {props.comments}
-          </Text>
+          <Text style={style.userPostStatText}>{props.comments}</Text>
         </View>
         <View style={style.userPostStatButtonRight}>
           <FontAwesomeIcon icon={faBookmark} color={'#79869F'} />
-          <Text style={style.userPostStatText}>
-            {props.bookmarks}
-          </Text>
+          <Text style={style.userPostStatText}>{props.bookmarks}</Text>
         </View>
       </View>
     </View>
@@ -62,5 +61,4 @@ UserPost.propTypes = {
   comments: PropTypes.number.isRequired,
   bookmarks: PropTypes.number.isRequired,
 };
-
 export default UserPost;
