@@ -1,21 +1,22 @@
-
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
-  SafeAreaView, TouchableOpacity, View, Text,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Text,
   FlatList,
 } from 'react-native';
 
 import Title from './components/Title/Title';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import globalStyle from './assets/styles/globalStyle';
 import UserStory from './components/UserStory/UserStory';
 import UserPost from './components/UserPost/UserPost';
 
-
-const App =()=> {
-  const userStories =[
+const App = () => {
+  const userStories = [
     {
       firstName: 'Joseph',
       id: 1,
@@ -62,36 +63,36 @@ const App =()=> {
       profileImage: require('./assets/images/default_profile.png'),
     },
   ];
-  const userPost=[
+  const userPosts = [
     {
       firstName: 'Alison',
       lastName: 'Becker',
       location: 'Boston, MA',
       likes: 1201,
       comments: 24,
-      bookmarks :55,
+      bookmarks: 55,
       image: require('./assets/images/default_post.png'),
       profileImage: require('./assets/images/default_profile.png'),
       id: 1,
     },
-     {
+    {
       firstName: 'Jennifer',
       lastName: 'Wilkson',
       location: 'Worcester, MA',
       likes: 1301,
       comments: 25,
-      bookmarks :70,
+      bookmarks: 70,
       image: require('./assets/images/default_post.png'),
       profileImage: require('./assets/images/default_profile.png'),
       id: 2,
     },
-      {
+    {
       firstName: 'Adam',
       lastName: 'Spera',
       location: 'Worcester, MA',
       likes: 100,
       comments: 8,
-      bookmarks : 3,
+      bookmarks: 3,
       image: require('./assets/images/default_post.png'),
       profileImage: require('./assets/images/default_profile.png'),
       id: 3,
@@ -102,18 +103,18 @@ const App =()=> {
       location: 'New York, NY',
       likes: 200,
       comments: 16,
-      bookmarks : 6,
+      bookmarks: 6,
       image: require('./assets/images/default_post.png'),
       profileImage: require('./assets/images/default_profile.png'),
       id: 4,
     },
-     {
+    {
       firstName: 'Nicolas',
       lastName: 'Namoradze',
       location: 'Berlin, Germany',
       likes: 2000,
       comments: 32,
-      bookmarks : 12,
+      bookmarks: 12,
       image: require('./assets/images/default_post.png'),
       profileImage: require('./assets/images/default_profile.png'),
       id: 5,
@@ -127,103 +128,128 @@ const App =()=> {
   const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
 
   //infinite scroll for user post
-  const userPostspageSize = 4;
+  const userPostspageSize = 2;
   const [userPostsCurrentPage, setUserPostsCurrentPage] = useState(1);
   const [userPostsRenderedData, setUserPostsRenderedData] = useState([]);
   const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false);
 
-  const pagination = (database, currentPage, pageSize)=>{
+  const pagination = (database, currentPage, pageSize) => {
     console.log('currentPage', currentPage);
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    if( startIndex >= database.length){
+    if (startIndex >= database.length) {
       return [];
     }
     return database.slice(startIndex, endIndex);
-  }
+  };
 
-
-  useEffect(()=>{
+  useEffect(() => {
     setIsLoadingUserStories(true);
     const getInitialData = pagination(userStories, 1, userStoriespageSize);
     setUserStoriesCurrentPage(getInitialData);
     setIsLoadingUserStories(false);
-  },[]);
 
+    setIsLoadingUserPosts(true);
+    const getInitialDataPosts = pagination(userPosts, 1, userPostspageSize);
+    setUserPostsRenderedData(getInitialDataPosts);
+    setIsLoadingUserPosts(false);
+  }, []);
 
   return (
     <SafeAreaView>
-     
       <View>
-        <FlatList 
-        ListHeaderComponent={<>
-         <View style={
-          globalStyle.header
-        }>
-      <Title title={'Let´s Explore '}/>
-      <TouchableOpacity style={globalStyle.messageIcon}>
-        <FontAwesomeIcon icon={faEnvelope} size={20} color={'#898DAE'}/>
-        <View style={globalStyle.messageNumberContainer}>
-          <Text style={globalStyle.messageNumber}>2</Text>
-        </View>
-      </TouchableOpacity>
-      </View>
-      <View style={globalStyle.userStoryContainer}>
-        <FlatList 
+        <FlatList
+          ListHeaderComponent={
+            <>
+              <View style={globalStyle.header}>
+                <Title title={'Let´s Explore '} />
+                <TouchableOpacity style={globalStyle.messageIcon}>
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    size={20}
+                    color={'#898DAE'}
+                  />
+                  <View style={globalStyle.messageNumberContainer}>
+                    <Text style={globalStyle.messageNumber}>2</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={globalStyle.userStoryContainer}>
+                <FlatList
+                  onEndReachedThreshold={0.5}
+                  onEndReached={() => {
+                    if (isLoadingUserStories) {
+                      return;
+                    }
+                    setIsLoadingUserStories(true);
+
+                    const contentToAppend = pagination(
+                      userStories,
+                      userStoriesCurrentPage + 1,
+                      userStoriespageSize,
+                    );
+                    if (contentToAppend > 0) {
+                      setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
+                      setUserStoriesRenderedData(prev => [
+                        ...prev,
+                        ...contentToAppend,
+                      ]);
+                    }
+                    setIsLoadingUserStories(false);
+                  }}
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}
+                  data={userStoriesRenderedData}
+                  renderItem={({item}) => (
+                    <UserStory
+                      key={'userStory' + item.id}
+                      firstName={item.firstName}
+                      profileImage={item.profileImage}
+                    />
+                  )}
+                />
+              </View>
+            </>
+          }
           onEndReachedThreshold={0.5}
-          onEndReached={()=>{
-            if(isLoadingUserStories){
+          onEndReached={() => {
+            if (isLoadingUserPosts) {
               return;
             }
-            setIsLoadingUserStories(true);
-            
+            setIsLoadingUserPosts(true);
+            console.log('fetching more data for you', userPostsCurrentPage+1);
+
             const contentToAppend = pagination(
-              userStories,
-              userStoriesCurrentPage + 1,
-              userStoriespageSize,
+              userPosts,
+              userPostsCurrentPage + 1,
+              userPostspageSize,
             );
-            if(contentToAppend > 0){
-              setUserStoriesCurrentPage(userStoriesCurrentPage + 1);
-              setUserStoriesRenderedData(prev=> [...prev, ...contentToAppend]);
+            if (contentToAppend > 0) {
+              setUserPostsCurrentPage(userPostsCurrentPage + 1);
+              setUserPostsRenderedData(prev => [...prev, ...contentToAppend]);
             }
-            setIsLoadingUserStories(false);
-
+            setIsLoadingUserPosts(false);
           }}
-
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={userStoriesRenderedData} 
+          data={userPostsRenderedData}
+          showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
-            <UserStory 
-              key={'userStory'+item.id}
-              firstName={item.firstName}
-              profileImage={item.profileImage}/>
+            <View style={globalStyle.userPostContainer}>
+              <UserPost
+                firstName={item.firstName}
+                lastName={item.lastName}
+                image={item.image}
+                likes={item.likes}
+                comments={item.comments}
+                bookmarks={item.bookmarks}
+                profileImage={item.profileImage}
+                location={item.location}
+              />
+            </View>
           )}
-          />
-      </View>
-        </>}
-        data={userPost} 
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) =>  (
-          <View style={globalStyle.userPostContainer}>
-          <UserPost 
-            firstName={item.firstName} 
-            lastName={item.lastName} 
-            image={item.image} 
-            likes={item.likes} 
-            comments={item.comments}
-            bookmarks={item.bookmarks}
-            profileImage={item.profileImage}
-            location={item.location}
-          />
-          </View>
-        )}
         />
       </View>
     </SafeAreaView>
   );
 };
-
-
 
 export default App;
