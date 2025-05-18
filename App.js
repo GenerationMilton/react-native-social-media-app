@@ -153,7 +153,11 @@ const App =()=> {
 
   return (
     <SafeAreaView>
-      <View style={
+     
+      <View>
+        <FlatList 
+        ListHeaderComponent={<>
+         <View style={
           globalStyle.header
         }>
       <Title title={'Let´s Explore '}/>
@@ -197,9 +201,9 @@ const App =()=> {
           )}
           />
       </View>
-      <View>
-        <FlatList 
+        </>}
         data={userPost} 
+        showsVerticalScrollIndicator={false}
         renderItem={({item}) =>  (
           <View style={globalStyle.userPostContainer}>
           <UserPost 
